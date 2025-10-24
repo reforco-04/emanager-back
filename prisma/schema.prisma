@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model clientes {
+  id              Int               @id @unique(map: "id") @default(autoincrement())
+  nome            String            @db.VarChar(50)
+  email           String            @db.VarChar(50)
+  whatsapp        String            @db.VarChar(20)
+  contas_digitais contas_digitais[]
+}
+
+model contas_digitais {
+  id                    Int                     @id @unique(map: "id") @default(autoincrement())
+  email                 String                  @db.VarChar(100)
+  senha                 String                  @db.VarChar(255)
+  store_id              String                  @db.VarChar(50)
+  autenticacao_2fa      String                  @db.VarChar(50)
+  data_nascimento       DateTime                @db.Date
+  cliente_id            Int?
+  clientes              clientes?               @relation(fields: [cliente_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "contas_digitais_fk6")
+  contas_digitais_jogos contas_digitais_jogos[]
+
+  @@index([cliente_id], map: "contas_digitais_fk6")
+}
+
+model contas_digitais_jogos {
+  id               Int             @id @unique(map: "id") @default(autoincrement())
+  conta_digital_id Int
+  jogo_id          Int
+  contas_digitais  contas_digitais @relation(fields: [conta_digital_id], references: [id], onUpdate: Restrict, map: "contas_digitais_jogos_fk1")
+  jogos            jogos           @relation(fields: [jogo_id], references: [id], onUpdate: Restrict, map: "contas_digitais_jogos_fk2")
+
+  @@index([conta_digital_id], map: "contas_digitais_jogos_fk1")
+  @@index([jogo_id], map: "contas_digitais_jogos_fk2")
+}
+
+model jogos {
+  id                    Int                     @id @unique(map: "id") @default(autoincrement())
+  nome                  String                  @db.VarChar(100)
+  plataforma_id         Int
+  preco_full            Float                   @default(0) @db.Float
+  preco_promo           Float                   @default(0) @db.Float
+  contas_digitais_jogos contas_digitais_jogos[]
+  plataformas           plataformas             @relation(fields: [plataforma_id], references: [id], onUpdate: Restrict, map: "jogos_fk2")
+  licencas              licencas[]
+
+  @@index([plataforma_id], map: "jogos_fk2")
+}
+
+model licencas {
+  id         Int    @id @unique(map: "id") @default(autoincrement())
+  prioridade String @db.VarChar(10)
+  jogo_id    Int
+  preco      Float  @db.Float
+  jogos      jogos  @relation(fields: [jogo_id], references: [id], onUpdate: Restrict, map: "licencas_fk2")
+
+  @@index([jogo_id], map: "licencas_fk2")
+}
+
+model niveis {
+  id       Int        @id @unique(map: "id") @default(autoincrement())
+  nome     String     @db.VarChar(50)
+  usuarios usuarios[]
+}
+
+model plataformas {
+  id    Int     @id @unique(map: "id") @default(autoincrement())
+  nome  String  @db.VarChar(20)
+  jogos jogos[]
+}
+
+model usuarios {
+  id       Int    @id @unique(map: "id") @default(autoincrement())
+  nome     String @db.VarChar(100)
+  email    String @db.VarChar(100)
+  senha    String @db.VarChar(255)
+  nivel_id Int
+  niveis   niveis @relation(fields: [nivel_id], references: [id], onUpdate: Restrict, map: "usuarios_fk4")
+
+  @@index([nivel_id], map: "usuarios_fk4")
+}
