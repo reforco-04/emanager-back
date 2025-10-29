@@ -1,21 +1,27 @@
-import express from "express"
-import cors from "cors"
+import express from "express";
+import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import docJson from "./src/docs/documentacao.json" with {type: "json"}
 
+import niveisRoute from "./src/routes/niveisRoute.mjs";
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+
+// Middleware - interceptores
+app.use(cors()); //libera requisições externas
+app.use(express.json()); //transforma o corpo da requisição em javascript
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(docJson));
 
 // Rotas
 
 app.get("/", (req, res) => {
-    res.send("Api Emanager");
+    res.redirect("/docs");
 })
 
+app.use("/niveis", niveisRoute);
 
 
 app.listen(8000, () => {
     console.log(`Servidor on: http://localhost:8000`);
-    
 })
