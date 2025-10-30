@@ -430,6 +430,247 @@
           }
         }
       }
+    },
+    "/clientes/": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Retorna todos os registros",
+        "responses": {
+          "200": {
+            "description": "Retorna todos os registros",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "nome": {
+                    "type": "string",
+                    "example": "nome"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "email"
+                  },
+                  "whatsapp": {
+                    "type": "string",
+                    "example": "whatsapp"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Cria um registro",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "example": "Nome"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "Email"
+                },
+                "whatsapp": {
+                  "type": "string",
+                  "example": "Whatsapp"
+                }
+              },
+              "required": [
+                "nome",
+                "email",
+                "whatsapp"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro criado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Registro criado com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clientes/{id}": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Retorna um registro",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna um registro",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "nome"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "email"
+                },
+                "whatsapp": {
+                  "type": "string",
+                  "example": "whatsapp"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Atualiza um registro",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Nome"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "Email"
+                },
+                "whatsapp": {
+                  "type": "string",
+                  "example": "Whatsapp"
+                }
+              },
+              "required": [
+                "id",
+                "nome",
+                "email",
+                "whatsapp"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro atualizado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Registro atualizado com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Deleta um registro",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro deletado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Registro deletado com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
