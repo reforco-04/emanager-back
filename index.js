@@ -6,6 +6,7 @@ import docJson from "./src/docs/documentacao.json" with {type: "json"}
 import niveisRoute from "./src/routes/niveisRoute.mjs";
 import plataformaRoute from "./src/routes/plataformaRoutes.mjs";
 import clientesRoute from "./src/routes/clientesRoute.mjs";
+import jogosRoute from "./src/routes/jogosRoute.mjs";
 
 
 const app = express();
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 app.use("/niveis", niveisRoute);
 app.use("/plataformas", plataformaRoute);
 app.use("/clientes", clientesRoute);
+app.use("/jogos", jogosRoute);
 
 app.listen(8000, () => {
     console.log(`Servidor on: http://localhost:8000`);
