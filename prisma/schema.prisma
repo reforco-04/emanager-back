@@ -35,14 +35,13 @@ model jogos {
   preco_promo   Float           @default(0) @db.Float
   plataformas   plataformas     @relation(fields: [plataforma_id], references: [id], onUpdate: Restrict, map: "jogos_fk2")
   licencas      licencas[]
-  pedidos_jogos pedidos_jogos[]
+
 
   @@index([plataforma_id], map: "jogos_fk2")
 }
 
 model licencas {
   id               Int             @id @unique(map: "id") @default(autoincrement())
-  prioridade       String          @db.VarChar(10)
   jogo_id          Int
   preco            Float           @db.Float
   conta_digital_id Int
@@ -54,6 +53,7 @@ model licencas {
   jogos            jogos           @relation(fields: [jogo_id], references: [id], onUpdate: Restrict, map: "licencas_fk2")
   contas_digitais  contas_digitais @relation(fields: [conta_digital_id], references: [id], onUpdate: Restrict, map: "licencas_fk4")
   clientes         clientes?       @relation(fields: [cliente_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "licencas_fk9")
+  pedidosJogos     pedidos_jogos[]
 
   @@index([jogo_id], map: "licencas_fk2")
   @@index([conta_digital_id], map: "licencas_fk4")
@@ -88,7 +88,7 @@ model pedidos {
   data          DateTime        @default(now()) @db.DateTime(0)
   cliente_id    Int
   valor         Decimal         @db.Decimal(10, 0)
-  status        String          @db.VarChar(20) @default("Pendente")
+  status        String          @default("Pendente") @db.VarChar(20)
   clientes      clientes        @relation(fields: [cliente_id], references: [id], onUpdate: Restrict, map: "pedidos_fk2")
   pedidos_jogos pedidos_jogos[]
   transacoes    transacoes[]
@@ -97,14 +97,14 @@ model pedidos {
 }
 
 model pedidos_jogos {
-  id        Int     @id @unique(map: "id") @default(autoincrement())
-  pedido_id Int
-  jogo_id   Int
-  pedidos   pedidos @relation(fields: [pedido_id], references: [id], onUpdate: Restrict, map: "pedidos_jogos_fk1")
-  jogos     jogos   @relation(fields: [jogo_id], references: [id], onUpdate: Restrict, map: "pedidos_jogos_fk2")
+  id         Int      @id @unique(map: "id") @default(autoincrement())
+  pedido_id  Int
+  licenca_id Int
+  pedidos    pedidos  @relation(fields: [pedido_id], references: [id], onUpdate: Restrict, map: "pedidos_jogos_fk1")
+  licencas   licencas @relation(fields: [licenca_id], references: [id], onUpdate: Restrict, map: "pedidos_jogos_fk2")
 
   @@index([pedido_id], map: "pedidos_jogos_fk1")
-  @@index([jogo_id], map: "pedidos_jogos_fk2")
+  @@index([licenca_id], map: "pedidos_jogos_fk2")
 }
 
 model transacoes {

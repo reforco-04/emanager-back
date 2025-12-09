@@ -11,6 +11,23 @@ async function buscarTodos(){
     }
 }
 
+async function pesquisar(nome){
+    try {
+        return await prisma.clientes.findMany({
+            where:{
+                nome:{
+                    contains: nome
+                }
+            }
+        });
+    } catch (error) {
+        return {
+            tipo: "error",
+            mensagem: error.message
+        }
+    }
+}
+
 async function buscarUm(id){
     try {
         const request = await prisma.clientes.findFirst({
@@ -104,5 +121,6 @@ export {
     buscarUm,
     criar,
     editar,
-    deletar
+    deletar,
+    pesquisar
 }

@@ -1,9 +1,9 @@
 import { prisma } from "../services/index.js";
 
-async function buscarTodos(){
+async function buscarTodos() {
     try {
         return await prisma.jogos.findMany({
-            include:{
+            include: {
                 plataformas: true,
                 licencas: true
             }
@@ -16,14 +16,14 @@ async function buscarTodos(){
     }
 }
 
-async function buscarUm(id){
+async function buscarUm(id) {
     try {
         const request = await prisma.jogos.findFirst({
             where: {
                 id: Number(id)
             }
         });
-        if(request){
+        if (request) {
             return request;
         }
         return {
@@ -39,13 +39,63 @@ async function buscarUm(id){
     }
 }
 
-async function criar(dados){
+async function pesquisar(dados) {
+    try {
+        const request = await prisma.jogos.findMany({
+            where: {
+                nome: {
+                    contains: dados.nome
+                },
+                plataformas: {
+                    nome: {
+                        contains: dados.plataforma
+                    }
+                },
+                licencas: {
+                    some: {
+                        status: "Disponível",
+                        tipo: dados.tipo
+                    }
+                }
+            },
+            include: {
+                plataformas: true,
+                licencas: {
+                    where: {
+                        status: "Disponível",
+                        tipo: dados.tipo
+                    },
+                    take: 1,
+                    orderBy: {
+                        id: "asc"
+                    }
+                }
+            }
+        });
+
+        if (request) {
+            return request;
+        }
+        return {
+            tipo: "warning",
+            mensagem: "Registro não encontrado"
+        }
+
+    } catch (error) {
+        return {
+            tipo: "error",
+            mensagem: error.message
+        }
+    }
+}
+
+async function criar(dados) {
     try {
         const request = await prisma.jogos.create({
             data: dados
         });
 
-        if(request){
+        if (request) {
             return {
                 tipo: "success",
                 mensagem: "Registro criado com sucesso!"
@@ -59,16 +109,16 @@ async function criar(dados){
     }
 }
 
-async function editar(dados, id){
+async function editar(dados, id) {
     try {
-        const request =  await prisma.jogos.update({
+        const request = await prisma.jogos.update({
             data: dados,
             where: {
                 id: Number(id)
             }
         });
 
-        if(request){
+        if (request) {
             return {
                 tipo: "success",
                 mensagem: "Registro atualizado com sucesso!"
@@ -82,15 +132,15 @@ async function editar(dados, id){
     }
 }
 
-async function deletar(id){
+async function deletar(id) {
     try {
-        const request =  await prisma.jogos.delete({
+        const request = await prisma.jogos.delete({
             where: {
                 id: Number(id)
             }
         });
 
-        if(request){
+        if (request) {
             return {
                 tipo: "success",
                 mensagem: "Registro deletado com sucesso!"
@@ -109,5 +159,6 @@ export {
     buscarUm,
     criar,
     editar,
-    deletar
+    deletar,
+    pesquisar
 }

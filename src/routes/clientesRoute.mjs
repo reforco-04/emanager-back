@@ -1,5 +1,5 @@
 import express from "express";
-import { buscarTodos, buscarUm, criar, deletar, editar } from "../controllers/clientesController.mjs"
+import { buscarTodos, buscarUm, criar, deletar, editar, pesquisar } from "../controllers/clientesController.mjs"
 
 const router = express.Router();
 
@@ -31,6 +31,21 @@ router.get("/:id", async (req, res) => {
             }
     } */
     res.json(await buscarUm(req.params.id));
+})
+
+router.get("/pesquisar/:nome", async (req, res) => {
+    // #swagger.tags = ['Clientes']
+    // #swagger.description = 'Retorna um registro'
+    /* #swagger.responses[200] = {
+            description: 'Retorna um registro',
+            schema: {
+                id: 1,
+                nome: "nome",
+                email: "email",
+                whatsapp: "whatsapp"
+            }
+    } */
+    res.json(await pesquisar(req.params.nome));
 })
 
 router.post("/", async (req, res) => {

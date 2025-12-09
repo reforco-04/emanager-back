@@ -5,7 +5,17 @@ async function buscarTodos() {
     return await prisma.pedidos.findMany({
       include: {
         clientes: true,
-        pedidos_jogos: true
+        pedidos_jogos: {
+          include: {
+            licencas: {
+              include: {
+                jogos: true,
+                contas_digitais: true
+              }
+            }
+          }
+        }
+
       },
     });
   } catch (error) {
@@ -40,62 +50,53 @@ async function buscarUm(id) {
 
 async function criar(dados) {
   try {
-    
-    const consultas = dados.nome_jogo.map((jogo) => {
-      return prisma.jogos.findFirst({
-        where: {
-          nome: {
-            contains: jogo.nome,
-          },
-          licencas: {
-            some: {
-              status: "Disponível", 
-            },
-          },
-          plataformas: {
-            nome: jogo.plataforma,
-          },
-        },
-        include: {
-          plataformas: true,
+    const pedidoCriado = await prisma.pedidos.create({
+      data: {
+        cliente_id: dados.cliente_id,
+        valor: dados.valor,
+      },
+    });
 
-          licencas: {
-            where: {
-              status: "Disponível", 
-            },
-          },
+    const registros = dados.licencas.map((licenca) => {
+      return prisma.pedidos_jogos.create({
+        data: {
+          pedido_id: pedidoCriado.id,
+          licenca_id: licenca,
         },
       });
     });
 
-    
-    const jogos = await Promise.all(consultas);
-    await prisma.pedidos
-      .create({
-        data: {
-          cliente_id: dados.cliente_id,
-          valor: dados.valor,
-        },
-      })
-      .then(async (pedidoCriado) => {
-        const registros = jogos.map((jogo) => {
-          return prisma.pedidos_jogos.create({
-            data: {
-              pedido_id: pedidoCriado.id,
-              jogo_id: jogo.id,
-            },
-          });
-        });
-        const jogosInseridos = await Promise.all(registros);
-        if (jogosInseridos) {
-          return {
-            tipo: "success",
-            mensagem: "Registro criado com sucesso!",
-          };
-        }
-      });
+    const licencasInseridos = await Promise.all(registros);
+    let mudarStatus = [];
 
+    if (licencasInseridos.length > 0) {
+      mudarStatus = dados.licencas.map((licenca) => {
+        return prisma.licencas.update({
+          where: {
+            id: Number(licenca)
+          },
+          data: {
+            status: "Locada"
+          },
+        });
+      });
+    }
+
+    const statusAlterados = await Promise.all(mudarStatus)
     
+    if (statusAlterados.length > 0) {
+      return {
+        tipo: "success",
+        mensagem: "Registro criado com sucesso!",
+      };
+    }
+    return {
+      tipo: "error",
+      mensagem: "Não foi possível inserir as licenças.",
+    };
+
+
+
   } catch (error) {
     return {
       tipo: "error",
@@ -129,6 +130,13 @@ async function editar(dados, id) {
 
 async function deletar(id) {
   try {
+
+    await prisma.pedidos_jogos.deleteMany({
+      where: {
+        pedido_id: Number(id)
+      }
+    })
+
     const request = await prisma.pedidos.delete({
       where: {
         id: Number(id),

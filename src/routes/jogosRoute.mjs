@@ -1,5 +1,5 @@
 import express from "express";
-import { buscarTodos, buscarUm, criar, deletar, editar } from "../controllers/jogosController.mjs"
+import { buscarTodos, buscarUm, criar, deletar, editar, pesquisar } from "../controllers/jogosController.mjs"
 
 const router = express.Router();
 
@@ -19,6 +19,22 @@ router.get("/", async (req, res) => {
     res.json(await buscarTodos());
 })
 
+router.post("/pesquisar", async (req, res) => {
+    // #swagger.tags = ['Jogos']
+    // #swagger.description = 'Pesquisar registros'
+    /* #swagger.responses[200] = {
+            description: 'Retorna varios registros',
+            schema: [{
+                id: 1,
+                nome: "nome",
+                plataforma_id: 1,
+                preco_full: 50.00,
+                preco_promo: 25.00
+            }]
+    } */
+    res.json(await pesquisar(req.body));
+})
+
 router.get("/:id", async (req, res) => {
     // #swagger.tags = ['Jogos']
     // #swagger.description = 'Retorna um registro'
@@ -34,6 +50,8 @@ router.get("/:id", async (req, res) => {
     } */
     res.json(await buscarUm(req.params.id));
 })
+
+
 
 router.post("/", async (req, res) => {
     // #swagger.tags = ['Jogos']
