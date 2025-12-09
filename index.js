@@ -13,6 +13,7 @@ import { login } from "./src/controllers/usuarioController.mjs";
 import licencasRoute from "./src/routes/licencasRoute.mjs";
 import contasDigitaisJogosRoute from "./src/routes/contasDigitaisJogosRoute.mjs";
 import { rotaProtegida } from "./src/utils/index.mjs";
+import pedidosRoute from "./src/routes/pedidosRoutes.mjs";
 
 
 const app = express();
@@ -46,7 +47,7 @@ app.post("/login", async (req, res) => {
     } */
     res.json(await login(req.body));
 });
-app.use("/niveis", rotaProtegida, niveisRoute);
+app.use("/niveis", niveisRoute);
 app.use("/plataformas", rotaProtegida, plataformaRoute);
 app.use("/clientes", rotaProtegida, clientesRoute);
 app.use("/jogos", rotaProtegida, jogosRoute);
@@ -54,6 +55,7 @@ app.use("/usuarios", rotaProtegida, usuariosRoute);
 app.use("/licencas", rotaProtegida, licencasRoute);
 app.use("/contas", rotaProtegida, contasRoute);
 app.use("/contas-digitais", rotaProtegida, contasDigitaisJogosRoute);
+app.use("/pedidos", rotaProtegida, pedidosRoute);
 
 app.listen(8000, () => {
     console.log(`Servidor on: http://localhost:8000`);

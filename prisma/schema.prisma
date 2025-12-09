@@ -88,6 +88,7 @@ model pedidos {
   data          DateTime        @default(now()) @db.DateTime(0)
   cliente_id    Int
   valor         Decimal         @db.Decimal(10, 0)
+  status        String          @db.VarChar(20) @default("Pendente")
   clientes      clientes        @relation(fields: [cliente_id], references: [id], onUpdate: Restrict, map: "pedidos_fk2")
   pedidos_jogos pedidos_jogos[]
   transacoes    transacoes[]

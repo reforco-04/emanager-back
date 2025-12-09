@@ -2233,6 +2233,274 @@
           }
         }
       }
+    },
+    "/pedidos/": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Retorna todos os registros",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna todos os registros",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "data": {
+                    "type": "string",
+                    "example": "22/11/2025"
+                  },
+                  "cliente_id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "valor": {
+                    "type": "number",
+                    "example": 150.75
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Cria um registro",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "string",
+                  "example": "22/11/2025"
+                },
+                "cliente_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "valor": {
+                  "type": "number",
+                  "example": 150.75
+                }
+              },
+              "required": [
+                "data",
+                "cliente_id",
+                "valor"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro criado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Registro criado com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pedidos/{id}": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Retorna um registro",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna um registro",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "data": {
+                  "type": "string",
+                  "example": "22/11/2025"
+                },
+                "cliente_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "valor": {
+                  "type": "number",
+                  "example": 150.75
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Atualiza um registro",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "data": {
+                  "type": "string",
+                  "example": "22/11/2025"
+                },
+                "cliente_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "valor": {
+                  "type": "number",
+                  "example": 150.75
+                }
+              },
+              "required": [
+                "id",
+                "data",
+                "cliente_id",
+                "valor"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro atualizado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Registro atualizado com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Deleta um registro",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro deletado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Registro deletado com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

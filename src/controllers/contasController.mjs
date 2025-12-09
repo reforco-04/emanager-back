@@ -5,11 +5,7 @@ async function buscarTodos(){
         const contas = await prisma.contas_digitais.findMany();
         
         // Formatar a data para o padrão brasileiro
-        return contas.map(conta => ({
-            ...conta,
-            data_nascimento: conta.data_nascimento ? 
-                conta.data_nascimento.toLocaleDateString('pt-BR') : null
-        }));
+        return contas;
     } catch (error) {
         return {
             tipo: "error",
