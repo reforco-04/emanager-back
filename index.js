@@ -9,11 +9,11 @@ import clientesRoute from "./src/routes/clientesRoute.mjs";
 import jogosRoute from "./src/routes/jogosRoute.mjs";
 import usuariosRoute from "./src/routes/usuariosRoute.mjs";
 import contasRoute from "./src/routes/contasRoute.mjs";
-import { login } from "./src/controllers/usuarioController.mjs";
 import licencasRoute from "./src/routes/licencasRoute.mjs";
 import contasDigitaisJogosRoute from "./src/routes/contasDigitaisJogosRoute.mjs";
-import { rotaProtegida } from "./src/utils/index.mjs";
 import pedidosRoute from "./src/routes/pedidosRoutes.mjs";
+import { dadosDashboard, login } from "./src/controllers/usuarioController.mjs";
+import { rotaProtegida } from "./src/utils/index.mjs";
 
 
 const app = express();
@@ -47,6 +47,10 @@ app.post("/login", async (req, res) => {
     } */
     res.json(await login(req.body));
 });
+
+app.get("/dashboard", rotaProtegida, async (req, res) => {
+    res.json(await dadosDashboard());
+})
 app.use("/niveis", niveisRoute);
 app.use("/plataformas", rotaProtegida, plataformaRoute);
 app.use("/clientes", rotaProtegida, clientesRoute);

@@ -28,14 +28,13 @@ model contas_digitais {
 }
 
 model jogos {
-  id            Int             @id @unique(map: "id") @default(autoincrement())
-  nome          String          @db.VarChar(100)
+  id            Int         @id @unique(map: "id") @default(autoincrement())
+  nome          String      @db.VarChar(100)
   plataforma_id Int
-  preco_full    Float           @default(0) @db.Float
-  preco_promo   Float           @default(0) @db.Float
-  plataformas   plataformas     @relation(fields: [plataforma_id], references: [id], onUpdate: Restrict, map: "jogos_fk2")
+  preco_full    Float       @default(0) @db.Float
+  preco_promo   Float       @default(0) @db.Float
+  plataformas   plataformas @relation(fields: [plataforma_id], references: [id], onUpdate: Restrict, map: "jogos_fk2")
   licencas      licencas[]
-
 
   @@index([plataforma_id], map: "jogos_fk2")
 }
@@ -69,6 +68,7 @@ model niveis {
 model plataformas {
   id    Int     @id @unique(map: "id") @default(autoincrement())
   nome  String  @db.VarChar(20)
+  cor   String? @db.VarChar(20)
   jogos jogos[]
 }
 
