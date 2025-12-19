@@ -109,12 +109,12 @@ async function criar(dados) {
     }
 }
 
-async function editar(dados, id) {
+async function editar(dados) {
     try {
         const request = await prisma.jogos.update({
             data: dados,
             where: {
-                id: Number(id)
+                id: dados.id
             }
         });
 

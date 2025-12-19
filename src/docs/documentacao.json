@@ -75,6 +75,13 @@
           "Niveis"
         ],
         "description": "Retorna todos os registros",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Retorna todos os registros",
@@ -106,6 +113,11 @@
         ],
         "description": "Cria um registro",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "obj",
             "in": "body",
@@ -158,6 +170,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -192,6 +209,11 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           },
           {
@@ -248,6 +270,11 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           }
         ],
