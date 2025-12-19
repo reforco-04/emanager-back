@@ -22,7 +22,7 @@ const app = express();
 app.use(cors()); //libera requisições externas
 app.use(express.json()); //transforma o corpo da requisição em javascript
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(docJson));
-
+app.use('/uploads', express.static('uploads')); //torna a pasta uploads pública
 // Rotas
 
 app.get("/", (req, res) => {

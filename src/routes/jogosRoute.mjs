@@ -1,6 +1,19 @@
 import express from "express";
 import { buscarTodos, buscarUm, criar, deletar, editar, pesquisar } from "../controllers/jogosController.mjs"
-
+import multer from "multer";
+import path from "path";
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // Pasta onde as imagens serão salvas
+    },
+    filename: function (req, file, cb) {
+        // Gera um nome único: timestamp atual + extensão original do arquivo
+        const extensaoArquivo = path.extname(file.originalname);
+        const nomeArquivo = `${Date.now()}${extensaoArquivo}`;
+        cb(null, nomeArquivo);
+    }
+});
+const upload = multer({ storage });
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -53,7 +66,7 @@ router.get("/:id", async (req, res) => {
 
 
 
-router.post("/", async (req, res) => {
+router.post("/", upload.single("imagem"), async (req, res) => {
     // #swagger.tags = ['Jogos']
     // #swagger.description = "Cria um registro"
     /* #swagger.parameters['obj'] = {
@@ -72,10 +85,15 @@ router.post("/", async (req, res) => {
                 description: 'Registro criado com sucesso.',
             }
     } */
-    res.json(await criar(req.body));
+    let dados = req.body;
+    dados.plataforma_id = parseInt(dados.plataforma_id);
+    dados.preco_full = parseFloat(dados.preco_full);
+    dados.preco_promo = parseFloat(dados.preco_promo);
+    dados.imagem = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    res.json(await criar(dados));
 })
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", upload.single("imagem"), async (req, res) => {
     // #swagger.tags = ['Jogos']
     // #swagger.description = "Atualiza um registro"
     /* #swagger.parameters['obj'] = {
@@ -95,7 +113,13 @@ router.put("/:id", async (req, res) => {
                 description: 'Registro atualizado com sucesso.',
             }
     } */
-    res.json(await editar(req.body, req.params.id));
+   let dados = req.body;
+   dados.id = parseInt(req.params.id);
+    dados.plataforma_id = parseInt(dados.plataforma_id);
+    dados.preco_full = parseFloat(dados.preco_full);
+    dados.preco_promo = parseFloat(dados.preco_promo);
+    dados.imagem = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    res.json(await editar(dados));
 })
 
 router.delete("/:id", async (req, res) => {

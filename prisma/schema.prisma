@@ -30,6 +30,7 @@ model contas_digitais {
 model jogos {
   id            Int         @id @unique(map: "id") @default(autoincrement())
   nome          String      @db.VarChar(100)
+  imagem       String?     @db.VarChar(100)
   plataforma_id Int
   preco_full    Float       @default(0) @db.Float
   preco_promo   Float       @default(0) @db.Float
